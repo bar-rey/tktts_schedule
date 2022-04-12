@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ title }}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <meta charset="utf-8"/>
+        <link href="{{url_for('static', filename='css/style.css')}}" type="text/css" rel="stylesheet"/>
+        <link href="{{url_for('static', filename='images/favicon.ico')}}" rel="shortcut icon"/>
+        {% block head %}
+        {% endblock %}
+    </head>
+    <body>
+        <header>
+            <div id="main-menu">
+                <div id="main-menu-block-first">
+                    <span id="main-menu-element-first" >
+                        <a href="/">Главная</a>
+                    </span>
+                </div>
+                <div>
+                    <span id="main-menu-elements">
+                        {% for elem in menu %}
+                            <span class="main-menu-element">
+                                <a href="{{ elem.url }}">{{ elem.title }}</a>
+                            </span>
+                        {% endfor %}
+                    </span>
+                </div>
+            </div>
+        </header>
+        <main>
+            {% block main %}
+            {% endblock %}
+        </main>
+        {% block body_scripts %}
+        {% endblock %}
+    </body>
+</html>

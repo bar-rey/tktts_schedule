@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+    {% block head %}
+    {% endblock %}
+        {% block main %}
+            <div id="vk_notify">
+				{% for cat, msg in get_flashed_messages(True) %}
+				<div class="flash {{cat}}">{{msg}}</div>
+				{% endfor %}
+                <span>Рассылка расписания для групп в беседы ВК</span>
+                <form action="" method="post" id="form_vk_notify">
+					{{ form.hidden_tag() }}
+					{% if form.date.errors %}
+						{{ form.date(class="invalid") }}
+						<span class="invalid-input">
+							{% for e in form.date.errors %}
+							{{ e }}
+							{% endfor %}
+						</span>
+					{% else %}
+						{{ form.date() }}
+					{% endif %}
+					{{ form.submit }}
+				</form>
+            </div>
+        {% endblock main %}

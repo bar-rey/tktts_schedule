@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+    {% block head %}
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script type="text/javascript">
+            let lists={{lists_dict|tojson|safe}};
+            let schedules={{schedules_dict|tojson|safe}};
+            let category="", name="", date="";
+            window.onload=function window_load(){
+                function load_cat_dates(sel, dates){
+                    if (dates != null) {
+                        for (var i = 0; i < dates.length; i++) {
+                            var opt = document.createElement('option');
+                            opt.value = dates[i];
+                            opt.innerHTML = dates[i];
+                            sel.appendChild(opt);
+                        }
+                        sel.options[0].selected=true; sel.disabled=false;
+                    }
+                }
+                let dates={{dates_dict|tojson|safe}};
+                if (dates == null) console.log("Список дат пуст");
+                else {
+                    load_cat_dates(document.getElementById('teachers_dates'), dates.teachers);
+                    load_cat_dates(document.getElementById('groups_dates'), dates.groups);
+                }
+            };
+            function load_cat_list(){
+                function do_job(list) {
+                    sel=document.getElementById(category);
+                    tmp=sel.options[0]; sel.innerHTML=""; sel.appendChild(tmp);
+                    for (var i = 0; i < list.length; i++) 
+                    {
+                        var opt = document.createElement('option');
+                        opt.value = list[i]; opt.innerHTML = list[i];
+                        sel.appendChild(opt);
+                    }
+                }
+                if (lists == null) console.log("Список пуст");
+                else do_job(lists[category][date]);
+            };
+            function show_schedule(){
+                function do_job(sch){
+                    var sch=schedules[category][date];
+                    var obj=null;
+                    for (var i=0; i<sch.length; i++) if(sch[i].name==name)obj=sch[i];
+                    var e=document.getElementById('schedule_show_response_block');
+                    e.innerHTML='';
+                    var table=document.createElement('table');
+                    var cap=document.createElement('caption'); 
+                    cap.innerHTML="Расписание для <b>"+obj.name+"</b>"+" на <b>"+obj.schedule[0].date+"</b> ("+obj.schedule[0].day+")";
+                    table.appendChild(cap);
+                    var colg=document.createElement('colgroup');
+                    var col1=document.createElement('col'); col1.style="background-color:lightgray"; col1.width="5%"; colg.appendChild(col1);
+                    var col2=document.createElement('col'); col2.width='95%'; colg.appendChild(col2); table.appendChild(colg);
+                    var thead=document.createElement('thead'); var tr=document.createElement('tr');
+                    var th=document.createElement('th'); th.innerHTML='№'; tr.appendChild(th);
+                    var th=document.createElement('th'); th.innerHTML='Пара'; tr.appendChild(th);
+                    thead.appendChild(tr); table.appendChild(thead);
+                    for (var i=0; i<obj.schedule.length; i++)
+                    {
+                        elem=obj.schedule[i];
+                        var tr=document.createElement('tr');
+                        var td=document.createElement('td'); td.innerHTML=elem.number; tr.appendChild(td);
+                        var td=document.createElement('td'); td.innerHTML=elem.lesson; tr.appendChild(td);
+                        table.appendChild(tr);
+                    }
+                    e.appendChild(table);
+                };
+                if (category!=="" && date!=="" && name !=="") {
+                    if (schedules == null) console.log("Расписание отсутствует");
+                    else do_job(schedules[category][date]);
+                }
+            };
+            function unselect_groupsBlock() {
+                category="", name="", date="";
+                document.getElementById('groups').options[0].selected=true;
+                document.getElementById('groups').disabled=true;
+                document.getElementById('groups_dates').options[0].selected=true;
+            };
+            function teachersDates_selectionChanged(){
+                unselect_groupsBlock();
+                category="teachers";
+                sel=document.getElementById('teachers_dates');
+                date=sel.options[sel.selectedIndex].value;
+                sel=document.getElementById('teachers');
+                load_cat_list(); sel.options[0].selected=true; sel.disabled=false;
+            };
+            function teachers_selectionChanged(){
+                sel=document.getElementById('teachers');
+                name=sel.options[sel.selectedIndex].value;
+            };
+            function unselect_teachersBlock() {
+                category="", name="", date="";
+                document.getElementById('teachers').options[0].selected=true;
+                document.getElementById('teachers').disabled=true;
+                document.getElementById('teachers_dates').options[0].selected=true;
+            }
+            function groupsDates_selectionChanged(){
+                unselect_teachersBlock();
+                category="groups";
+                sel=document.getElementById('groups_dates');
+                date=sel.options[sel.selectedIndex].value;
+                sel=document.getElementById('groups');
+                load_cat_list(); sel.options[0].selected=true; sel.disabled=false;
+            };
+            function groups_selectionChanged(){
+                sel=document.getElementById('groups');
+                name=sel.options[sel.selectedIndex].value;
+            };
+            function schedule_show_button_click(){
+                show_schedule();
+            };
+        </script>
+    {% endblock %}
+        {% block main %}
+            <div id="schedule_show">
+                <div class="schedule_show_block">
+                    <select id="groups_dates" onchange="groupsDates_selectionChanged();" disabled>
+                        <option value="" selected disabled>Даты</option>
+                    </select>
+                    <select id="groups" onchange="groups_selectionChanged();" disabled>
+                        <option value="" selected disabled>Группы</option>
+                    </select>
+                </div>
+                <div class="schedule_show_block">
+                    <select id="teachers_dates" onchange="teachersDates_selectionChanged();" disabled>
+                        <option value="" selected disabled>Даты</option>
+                    </select>
+                    <select id="teachers" onchange="teachers_selectionChanged();" disabled>
+                        <option value="" selected disabled>Преподаватели</option>
+                    </select>
+                </div>
+                <button id="schedule_show_button" onclick="schedule_show_button_click();">Посмотреть</button>
+                <div id="schedule_show_response_block"></div>
+            </div>
+        {% endblock main %}

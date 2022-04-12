@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <meta charset="utf-8"/>
+        <link href="{{ url_for('static', filename='css/index.css') }}" type="text/css" rel="stylesheet"/>
+        <link href="{{url_for('static', filename='images/favicon.ico')}}" rel="shortcut icon"/>
+        <title>{{ title }}</title>
+    </head>
+    <body>
+        <main>
+            <div id="index-menu">
+                {% for elem in menu %}
+                <div class="index-menu-element">
+                    <a href="{{ elem.url }}">{{ elem.title }}</a>
+                </div>
+                {% endfor %}
+            </div>
+        </main>
+    </body>
+</html>

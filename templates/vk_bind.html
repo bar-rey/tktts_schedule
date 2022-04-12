@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+    {% block head %}
+    {% endblock %}
+        {% block main %}
+            <div id="vk_bind">
+				{% for cat, msg in get_flashed_messages(True) %}
+				<div class="flash {{cat}}">{{msg}}</div>
+				{% endfor %}
+                {% if current_user.vk_id %}
+                <span>ID привязанной страницы ВК: {{ current_user.vk_id }}</span>
+                {% endif %}
+                <form action="" method="post" id="form_vk_bind">
+					{{ form.hidden_tag() }}
+					{% if form.url.errors %}
+						{{ form.url(class="invalid") }}
+						<span class="invalid-input">
+							{% for e in form.url.errors %}
+							{{ e }}
+							{% endfor %}
+						</span>
+					{% else %}
+						{{ form.url() }}
+					{% endif %}
+					{{ form.submit }}
+				</form>
+            </div>
+        {% endblock main %}

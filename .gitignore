@@ -1,0 +1,11 @@
+*.bak
+*.zip
+__pycache__
+database_scripts/ensure_admin.sql
+app_secret_key.txt
+vk_config.py
+db.db
+tktts.ini
+tktts.sock
+*.json
+*.csv

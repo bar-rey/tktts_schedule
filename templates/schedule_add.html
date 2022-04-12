@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+    {% block head %}
+    {% endblock %}
+        {% block main %}
+            <div id="schedule_add">
+				{% for cat, msg in get_flashed_messages(True) %}
+				<div class="flash {{cat}}">{{msg}}</div>
+				{% endfor %}
+                <form action="" method="post" id="form_schedule_add">
+					{{ form.hidden_tag() }}
+					{% if form.url.errors %}
+						{{ form.url(class="invalid") }}
+						<span class="invalid-input">
+							{% for e in form.url.errors %}
+							{{ e }}
+							{% endfor %}
+						</span>
+					{% else %}
+						{{ form.url() }}
+					{% endif %}
+					{{ form.submit }}
+				</form>
+            </div>
+        {% endblock main %}

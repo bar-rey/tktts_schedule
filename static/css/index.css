@@ -1,0 +1,42 @@
+* {
+    padding: 0;
+    margin: 0;
+    font-family: 'Times New Roman', 'Liberation Serif', serif;
+}
+
+@media screen and (max-width: 599px) {
+    html {
+        font-size: 13px;
+    }
+}
+
+@media screen and (min-width: 600px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+#index-menu {
+    height: 100vh;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: minmax(300px, 100vh);
+}
+
+.index-menu-element {
+    background-color: black;
+    border: 1px solid gray;
+    display: grid;
+    place-content: center;
+}
+
+.index-menu-element > a {
+    font-size: 3rem;
+    text-align: center;
+    color: lightgray;
+}
+
+.index-menu-element > a:hover {
+    color: white;
+}

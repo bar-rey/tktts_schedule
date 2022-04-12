@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+        {% block main %}
+        <div id="register_main">
+			{% for cat, msg in get_flashed_messages(True) %}
+			<div class="flash {{cat}}">{{msg}}</div>
+			{% endfor %}
+			<form action="" method="post" id="form_register">
+			{{ form.hidden_tag() }}
+			{% if form.login.errors %}
+				{{ form.login(class="invalid") }}
+				<span class="invalid-input">
+					{% for e in form.login.errors %}
+					{{ e }}
+					{% endfor %}
+				</span>
+			{% else %}
+				{{ form.login() }}
+			{% endif %}
+			{% if form.password.errors %}
+				{{ form.password(class="invalid") }}
+				<span class="invalid-input">
+					{% for e in form.password.errors %}
+					{{ e }}
+					{% endfor %}
+				</span>
+			{% else %}
+				{{ form.password() }}
+			{% endif %}
+			{% if form.password_repeat.errors %}
+				{{ form.password_repeat(class="invalid") }}
+				<span class="invalid-input">
+					{% for e in form.password_repeat.errors %}
+					{{ e }}
+					{% endfor %}
+				</span>
+			{% else %}
+				{{ form.password_repeat() }}
+			{% endif %}
+			{% if current_user.role=="administrator" %}
+			{% if form.role.errors %}
+				{{ form.role(class="invalid") }}
+				<span class="invalid-input">
+					{% for e in form.role.errors %}
+					{{ e }}
+					{% endfor %}
+				</span>
+			{% else %}
+				{{ form.role() }}
+			{% endif %}
+			{% endif %}
+			{{ form.submit() }}
+			</form>
+		</div>
+        {% endblock main %}

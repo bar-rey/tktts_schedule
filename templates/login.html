@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+        {% block main %}
+        <div id="login_main">
+			{% for cat, msg in get_flashed_messages(True) %}
+			<div class="flash {{cat}}">{{msg}}</div>
+			{% endfor %}
+			<form action="" method="post" id="form_login">
+			{{ form.hidden_tag() }}
+			{% if form.login.errors %}
+				{{ form.login(class="invalid") }}
+				<span class="invalid-input">
+					{% for e in form.login.errors %}
+					{{ e }}
+					{% endfor %}
+				</span>
+			{% else %}
+				{{ form.login() }}
+			{% endif %}
+			{% if form.password.errors %}
+				{{ form.password(class="invalid") }}
+				<span class="invalid-input">
+					{% for e in form.password.errors %}
+					{{ e }}
+					{% endfor %}
+				</span>
+			{% else %}
+				{{ form.password() }}
+			{% endif %}
+			<div id="checkbox">{{ form.remember.label() }} {{ form.remember() }}</div>
+			{{ form.submit() }}
+			</form>
+		</div>
+        {% endblock main %}

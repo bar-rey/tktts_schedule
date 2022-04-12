@@ -1,0 +1,140 @@
+* {
+    padding: 0;
+    margin: 0;
+    font-family: 'Times New Roman', 'Liberation Serif', serif;
+    -webkit-text-size-adjust: 100%;
+}
+
+@media screen and (max-width: 599px) {
+    html { font-size: 13px; }
+}
+
+@media screen and (min-width: 600px) {
+    html { font-size: 16px; }
+}
+
+body {
+    display:grid;
+    grid-template-rows: 160px 1fr;
+}
+
+header {
+    grid-row: 1;
+    background-color: black;
+}
+
+#main-menu {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.8fr, 0.2fr;
+}
+
+#main-menu a { color: lightgray; text-decoration: none; }
+#main-menu a:hover { color: white; }
+#main-menu span { text-align: center; }
+#main-menu-block-first {border-bottom: 1px solid gray;}
+#main-menu > div {
+    display: grid;
+    align-items: center;
+}
+
+.main-menu-elements { grid-row: 2/3; }
+.main-menu-element a { font-size: 1.5rem; padding: 2px; }
+
+#main-menu-element-first { grid-row: 1/2; }
+#main-menu-element-first a { font-size: 2.5rem; }
+
+#schedule_show {
+    margin: 0.75rem;
+    display:grid;
+    row-gap: 0.25rem;
+    column-gap: 0.5rem;
+    grid-row: 2;
+    justify-content: center;
+    grid-template-columns: 1fr 1fr;
+}
+
+.schedule_show_block {
+    display:grid;
+    grid-template-columns: auto;
+    row-gap: 0.25rem;
+}
+
+.schedule_show_block > select, #schedule_show_button, #schedule_add_button, input, #form_register > select {
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: white;
+}
+
+.schedule_show_block > select {
+    padding: 0.8rem;
+    font-size: 1rem;
+    width: 100%;
+}
+
+#schedule_show > select > option {
+    font-size: 1rem;
+}
+
+#vk_bind > span, #vk_notify > span { font-size: 1.10rem ;}
+
+#schedule_show_button {
+    grid-column: 1/3;
+    padding: 1rem;
+    font-size: 1.5rem;
+}
+
+#schedule_show_response_block {
+    grid-column: 1/3;
+}
+
+#schedule_show_response_block>table {
+    margin: 0.7rem 0 0 0;
+    width: 100%;
+    border-collapse:collapse;
+}
+#schedule_show_response_block>table thead{
+    background-color: gray;
+}
+#schedule_show_response_block>table td,#schedule_show_response_block>table th{
+    border: 1px solid black;
+    font-size: 1rem;
+    padding: 0.75rem;
+    text-align: left;
+}
+#schedule_show_response_block>table caption {
+    font-size: 1.25rem;
+}
+
+#schedule_add_button {
+    padding: 1rem;
+    font-size: 1.5rem;
+}
+
+#login_main, #register_main, #schedule_add, #vk_bind, #vk_notify {
+    margin: 0.75rem;
+	display: grid;
+	justify-content: center;
+}
+
+#form_login, #form_register, #form_schedule_add, #form_vk_bind, #form_vk_notify {
+	display: grid;
+	row-gap: 0.25rem;
+    grid-auto-columns: minmax(300px, auto);
+}
+
+input, #form_register > select, #form_vk_notify > select {
+	font-size: 1.10rem;
+	padding: 1rem;
+}
+
+.flash {
+    border: 1px solid black;
+    background-color: white;
+    margin-bottom: 0.5rem;
+	font-size: 1.2rem;
+	display: grid;
+	padding: 0.8rem;
+}
