@@ -11,9 +11,8 @@ from vk_notifier import vk_notifier
 from vk_event_handler import VkEventHandler
 
 app = Flask(__name__)
-if os.path.exists(os.path.join(app.root_path, 'app_secret_key.txt')):
-	with open(os.path.join(app.root_path, 'app_secret_key.txt'), mode='r', encoding='utf-8') as f:
-		app.config['SECRET_KEY'] = f.read()
+with open(os.path.join(app.root_path, 'app_secret_key.txt'), mode='r', encoding='utf-8') as f:
+	app.config['SECRET_KEY'] = f.read()
 app.config['DATABASE'] = os.path.join(app.root_path, 'db.db')
 
 login_manager = LoginManager(app)
@@ -22,13 +21,17 @@ login_manager.login_message = "Авторизуйтесь для просмот�
 login_manager.login_message_category = "success"
 
 def connect_db():
-    conn = sqlite3.connect(app.config['DATABASE'])
-    conn.row_factory = sqlite3.Row
-    return conn
+	'''
+	Функция для установления соединения с базой данных.
+	Данные при работе с БД будут предоставляться в формате ключ - значение (название поля - значение поля записи)
+	'''
+	conn = sqlite3.connect(app.config['DATABASE'])
+	conn.row_factory = sqlite3.Row
+	return conn
 
 def create_db():
 	'''
-	Функция для создания базы данных
+	Функция для создания базы данных и заполнения её данными по умолчанию с помощью скриптов
 	'''
 	db = connect_db()
 	with open(os.path.join(app.root_path, 'database_scripts/script.sql'), mode='r', encoding='utf-8') as f:
@@ -50,6 +53,10 @@ def get_db():
 	return g.link_db
 
 def get_menu_category():
+	'''
+	Функция для получения категории меню
+	default/guest/moderator/administrator
+	'''
 	return current_user.role if current_user.is_authenticated else "default"
 
 dbase = None
@@ -72,11 +79,20 @@ def close_db(error):
 
 @login_manager.user_loader
 def load_user(user_id):
+	'''
+	Загрузка пользователя
+	user_id - извлечённый из сессионной куки id пользователя, полученный методом get_id класса User
+	'''
 	user = dbase.getUserById(user_id)
 	return User().create(user) if user else abort(401)
 
 @app.route("/register/", methods=["POST", "GET"])
 def register():
+	'''
+	Создание нового аккаунта.
+	Администратор может создавать сколько угодно новых аккаунтов, выбирая им роль (гость/модератор/администратор).
+	Неавторизованный пользователь создаёт аккаунт, который будет иметь роль гостя.
+	'''
 	if current_user.is_authenticated:
 		if current_user.role == "administrator":
 			form = AdministratorRegisterForm()
@@ -106,9 +122,9 @@ def login():
 		return redirect(url_for('index'))
 	form = LoginForm()
 	if form.validate_on_submit():
-		user = dbase.getUserByLogin(form.login.data)    # получение данных пользователя (кортеж) из БД
+		user = dbase.getUserByLogin(form.login.data)    # получение данных пользователя из БД
 		if user and check_password_hash(user['password'], form.password.data):    # проверка пароля
-			userlogin = User().create(user)    # объект пользователя == соответствующие поля из БД
+			userlogin = User().create(user)    # объект пользователя == запись из БД
 			login_user(userlogin, remember=form.remember.data) # объект будет доступен через current_user; id объекта пользователя хранится в сессии
 			return redirect(request.args.get("next") or url_for('index'))
 		flash("Неверный логин или пароль", "error")

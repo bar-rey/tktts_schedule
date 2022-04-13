@@ -36,7 +36,7 @@ class VkEventHandler():
         return schedule if schedule else f"Расписание для '{name}' на {date} не найдено"
 
     def __get_add_schedule_answer(self, url):
-        res = Schedule.add_schedule(url, vk_notify_subscribers=self.dbase.getSubscribers())
+        res = Schedule.add_schedule(url)
         if res: return "Расписание успешно добавлено"
         elif res is None: return "Неправильная ссылка"
         else: return "Что-то пошло не так"
@@ -94,13 +94,13 @@ class VkEventHandler():
                             elif command == "отписаться":
                                 self.__message_send(self.__get_unsubscribe_answer(peer_id), peer_id)
                             elif command == "помощь":
-                                self.__message_send("Обращаясь к боту, необходимо указывать его имя ({0}).\n\
+                                self.__message_send(f"Обращаясь к боту, необходимо указывать его имя ({self.name}).\n\
 Доступные команды (угловые скобки необходимо опустить):\n\
 подписать <группа> <-- подписать вашу беседу на получение расписания какой-либо группы,\n\
 отписаться <-- отписаться от получения расписания,\n\
 расписание <-- получить расписание подписанной группы, датируемое сегодняшним днём,\n\
 расписание <сегодня> <-- получить расписание подписанной группы, датируемое сегодняшним днём,\n\
-расписание <дата (дд.мм.гггг)> <-- получить расписание подписанной группы за определённую дату.".format(self.name), peer_id)
+расписание <дата (дд.мм.гггг)> <-- получить расписание подписанной группы за определённую дату.", peer_id)
                 else:
                     user = self.dbase.getUserByVkId(peer_id)
                     if user and user['role'] in {'moderator', 'administrator'}:
